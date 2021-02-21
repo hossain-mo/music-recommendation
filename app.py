@@ -14,6 +14,9 @@ import numpy as np
 from collections import defaultdict
 
 from flask import request, jsonify
+import requests
+import json
+
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -35,7 +38,20 @@ def home():
     feature=(mean_matrix,covariance,0)
 
     pred= test.nearestClass(test.getNeighbors(test.dataset ,feature , 5))
-
+    callNodeApi(results[pred])
     return jsonify({"type" : results[pred]}),200
 
+def callNodeApi(type):
+    params = {
+    'api_key': '{API_KEY}',
+    "song_genre":"romanic",
+    "song_name": "2olol walahi",
+    "singer_name":"legicy",
+    "mood": "Happiness",
+    "occasion":"test occasion",
+    "year":2019,
+    "album":"test flask"
+    }
+    r = requests.post('http://127.0.0.1:3000/api/songs', params)
+    # json.loads(r)
 app.run()
